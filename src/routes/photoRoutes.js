@@ -1,9 +1,8 @@
-import express from "express";
-import photoController from "../controllers/photoController.js";
-import peopleController from "../controllers/peopleController.js";
-import upload from "../config/multer.js";
+import express from 'express';
+import upload from '../config/multer.js';
+import photoController from '../controllers/photoController.js';
 const router = express.Router();
-router.post('/photo/create', upload.single('photo'));
+router.post('/photo/create',upload.single('photo'));
 router.get('/photos', photoController.index);
-router.get('/photo/people', peopleController.photosPeople);
+router.get('/photos/people',photoController.photosPeople);
 export default router;
