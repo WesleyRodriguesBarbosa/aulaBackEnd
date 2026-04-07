@@ -1,22 +1,46 @@
-import photo from '../models/Photo.js';
+import Photo from '../models/Photo.js';
+
 class PhotoRepository {
-    //Busca todos as fotos cadastradas no banco e dados
+
+    // GET ALL
     async findAll() {
-        return await photo.find();
+        return await Photo.find();
     }
-    
-    //Busca todas as fotos e popula com os dados da pessoa a qual a foto pertence
+
+    // GET ALL + PEOPLE (JOIN)
     async findPhotosAndPeople() {
-        return await photo.find()
+        return await Photo.find()
             .populate('people', 'name age')
-            .sort({ createdAt: -1 })
+            .sort({ createdAt: -1 });
     }
 
-    // Criar nova foto
+    // GET BY ID
+    async findById(id) {
+        return await Photo.findById(id)
+            .populate('people', 'name age'); // 🔥 útil aqui também
+    }
+
+    // CREATE
     async create(photoData) {
-        const newPhoto = new photo(photoData);
-        return await newPhoto.save();
+        return await Photo.create(photoData);
     }
 
+    // UPDATE
+    async update(id, photoData) {
+        return await Photo.findByIdAndUpdate(
+            id,
+            photoData,
+            {
+                new: true,
+                runValidators: true // 🔥 importante
+            }
+        ).populate('people', 'name age');
+    }
+
+    // DELETE
+    async delete(id) {
+        return await Photo.findByIdAndDelete(id);
+    }
 }
+
 export default new PhotoRepository();
